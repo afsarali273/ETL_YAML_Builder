@@ -68,6 +68,7 @@ jobs:
   release:
     needs: build
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
 
     steps:
       - name: Download Windows artifacts
@@ -91,5 +92,7 @@ jobs:
             ./macos/*.zip
           draft: false
           prerelease: false
+          tag_name: ${{ github.ref_name || 'manual-release' }}
+          name: ${{ github.ref_name || 'Manual Release' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
