@@ -59,14 +59,32 @@
       "node_modules/**/*"
     ],
     "win": {
-      "target": "nsis"
+      "target": {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      "sign": false
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
     },
     "mac": {
-      "target": "dmg"
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64"]
+        },
+        {
+          "target": "zip",
+          "arch": ["arm64", "x64"]
+        }
+      ],
+      "hardenedRuntime": false,
+      "gatekeeperAssess": false,
+      "sign": false,
+      "type": "distribution",
+      "category": "public.app-category.developer-tools"
     },
     "linux": {
       "target": "AppImage"
