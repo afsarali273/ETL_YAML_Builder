@@ -1,11 +1,49 @@
-import type { JobConfig } from "../types";
-import { TextField, Box, Paper, Typography, InputAdornment } from "@mui/material";
+import type { JobConfig, DatabaseConfig } from "../types";
+import { TextField, Box, Paper, Typography, InputAdornment, Autocomplete } from "@mui/material";
 import StorageIcon from '@mui/icons-material/Storage';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import AccountTreeIcon from '@mui/icons-material/AccountTree';
 import DnsIcon from '@mui/icons-material/Dns';
 
-export default function SourceTargetForm({ value, onChange }: { value: JobConfig; onChange: (v: JobConfig) => void }) {
+export default function SourceTargetForm({
+    value,
+    onChange,
+    databases = []
+}: {
+    value: JobConfig;
+    onChange: (v: JobConfig) => void;
+    databases?: DatabaseConfig[];
+}) {
+    const handleSourceDbSelect = (dbConfig: DatabaseConfig | null) => {
+        if (dbConfig) {
+            onChange({
+                ...value,
+                source: {
+                    ...value.source,
+                    type: dbConfig.type,
+                    dbServer: dbConfig.dbServer,
+                    database: dbConfig.database,
+                    schema: dbConfig.schema,
+                }
+            });
+        }
+    };
+
+    const handleTargetDbSelect = (dbConfig: DatabaseConfig | null) => {
+        if (dbConfig) {
+            onChange({
+                ...value,
+                target: {
+                    ...value.target,
+                    type: dbConfig.type,
+                    dbServer: dbConfig.dbServer,
+                    database: dbConfig.database,
+                    schema: dbConfig.schema,
+                }
+            });
+        }
+    };
+
     return (
         <Box display="flex" flexDirection={{ xs: 'column', lg: 'row' }} gap={3} sx={{ mt: 3 }}>
             {/* Source Database */}
@@ -55,6 +93,42 @@ export default function SourceTargetForm({ value, onChange }: { value: JobConfig
                     borderRadius: '16px 16px 0 0'
                 }}>
                     <Box display="flex" flexDirection="column" gap={2.5}>
+                        {databases.length > 0 && (
+                            <Autocomplete
+                                options={databases}
+                                getOptionLabel={(option) => option.name}
+                                onChange={(_, newValue) => handleSourceDbSelect(newValue)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Load from Saved Config"
+                                        placeholder="Select a saved configuration"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '&:hover fieldset': {
+                                                    borderColor: '#11998e',
+                                                },
+                                                '&.Mui-focused fieldset': {
+                                                    borderColor: '#11998e',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                )}
+                                renderOption={(props, option) => (
+                                    <li {...props}>
+                                        <Box>
+                                            <Typography variant="body2" fontWeight={600}>
+                                                {option.name}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                {option.dbServer} • {option.database}
+                                            </Typography>
+                                        </Box>
+                                    </li>
+                                )}
+                            />
+                        )}
                         <TextField
                             label="Database Server"
                             fullWidth
@@ -198,6 +272,42 @@ export default function SourceTargetForm({ value, onChange }: { value: JobConfig
                     borderRadius: '16px 16px 0 0'
                 }}>
                     <Box display="flex" flexDirection="column" gap={2.5}>
+                        {databases.length > 0 && (
+                            <Autocomplete
+                                options={databases}
+                                getOptionLabel={(option) => option.name}
+                                onChange={(_, newValue) => handleTargetDbSelect(newValue)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Load from Saved Config"
+                                        placeholder="Select a saved configuration"
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                '&:hover fieldset': {
+                                                    borderColor: '#4facfe',
+                                                },
+                                                '&.Mui-focused fieldset': {
+                                                    borderColor: '#4facfe',
+                                                },
+                                            },
+                                        }}
+                                    />
+                                )}
+                                renderOption={(props, option) => (
+                                    <li {...props}>
+                                        <Box>
+                                            <Typography variant="body2" fontWeight={600}>
+                                                {option.name}
+                                            </Typography>
+                                            <Typography variant="caption" color="text.secondary">
+                                                {option.dbServer} • {option.database}
+                                            </Typography>
+                                        </Box>
+                                    </li>
+                                )}
+                            />
+                        )}
                         <TextField
                             label="Database Server"
                             fullWidth

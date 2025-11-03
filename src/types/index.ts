@@ -1,5 +1,15 @@
 export type DBType = "mssql" | "mysql" | "odbc" | "db2";
 
+export interface DatabaseConfig {
+    id: string;
+    name: string;
+    type: DBType;
+    dbServer: string;
+    database: string;
+    schema: string;
+    description?: string;
+}
+
 export interface DBConfig {
     type: DBType;
     dbServer?: string;
