@@ -12,41 +12,67 @@ const theme = createTheme({
     palette: {
         mode: 'light',
         primary: {
-            main: '#3b82f6',
-            light: '#60a5fa',
-            dark: '#2563eb',
+            main: '#6366f1',
+            light: '#a5b4fc',
+            dark: '#4f46e5',
         },
         secondary: {
-            main: '#8b5cf6',
-            light: '#a78bfa',
-            dark: '#7c3aed',
+            main: '#06b6d4',
+            light: '#67e8f9',
+            dark: '#0891b2',
         },
         background: {
-            default: '#0f172a',
+            default: '#f8fafc',
             paper: '#ffffff',
         },
         success: {
-            main: '#06d6a0',
+            main: '#10b981',
+            light: '#6ee7b7',
         },
         warning: {
-            main: '#ffd60a',
+            main: '#f59e0b',
+            light: '#fbbf24',
         },
         error: {
-            main: '#ef476f',
+            main: '#ef4444',
+            light: '#f87171',
+        },
+        grey: {
+            50: '#f9fafb',
+            100: '#f3f4f6',
+            200: '#e5e7eb',
+            300: '#d1d5db',
+            400: '#9ca3af',
+            500: '#6b7280',
+            600: '#4b5563',
+            700: '#374151',
+            800: '#1f2937',
+            900: '#111827',
         },
     },
     typography: {
-        fontFamily: '"Inter", "SF Pro Display", "Segoe UI", "Roboto", sans-serif',
+        fontFamily: '"Inter", "SF Pro Display", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", sans-serif',
         h4: {
             fontWeight: 700,
-            color: '#1e293b',
+            color: '#1f2937',
+            letterSpacing: '-0.025em',
         },
         h5: {
             fontWeight: 700,
+            color: '#1f2937',
+            letterSpacing: '-0.025em',
         },
         h6: {
             fontWeight: 600,
+            color: '#374151',
+            letterSpacing: '-0.025em',
         },
+        body1: {
+            color: '#4b5563',
+        },
+    },
+    shape: {
+        borderRadius: 12,
     },
     components: {
         MuiTextField: {
@@ -54,19 +80,22 @@ const theme = createTheme({
                 root: {
                     '& .MuiOutlinedInput-root': {
                         borderRadius: 12,
-                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                        backdropFilter: 'blur(10px)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        transition: 'all 0.3s ease',
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #e5e7eb',
+                        transition: 'all 0.2s ease-in-out',
                         '&:hover': {
-                            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                            boxShadow: '0 8px 32px rgba(59, 130, 246, 0.15)',
-                            transform: 'translateY(-1px)',
+                            borderColor: '#d1d5db',
+                            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                         },
                         '&.Mui-focused': {
-                            backgroundColor: '#ffffff',
-                            boxShadow: '0 0 0 3px rgba(59, 130, 246, 0.1), 0 8px 32px rgba(59, 130, 246, 0.2)',
-                            transform: 'translateY(-2px)',
+                            borderColor: '#6366f1',
+                            boxShadow: '0 0 0 3px rgba(99, 102, 241, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+                        },
+                    },
+                    '& .MuiInputLabel-root': {
+                        color: '#6b7280',
+                        '&.Mui-focused': {
+                            color: '#6366f1',
                         },
                     },
                 },
@@ -78,15 +107,16 @@ const theme = createTheme({
                     borderRadius: 12,
                     textTransform: 'none',
                     fontWeight: 600,
-                    padding: '14px 28px',
-                    transition: 'all 0.3s ease',
+                    padding: '12px 24px',
+                    fontSize: '0.875rem',
+                    transition: 'all 0.2s ease-in-out',
                     '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+                        transform: 'translateY(-1px)',
+                        boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
                     },
                 },
                 contained: {
-                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 },
             },
         },
@@ -95,29 +125,65 @@ const theme = createTheme({
                 root: {
                     textTransform: 'none',
                     fontWeight: 600,
-                    fontSize: '1rem',
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                        transform: 'translateY(-1px)',
+                    fontSize: '0.875rem',
+                    color: '#6b7280',
+                    '&.Mui-selected': {
+                        color: '#6366f1',
                     },
+                },
+            },
+        },
+        MuiTabs: {
+            styleOverrides: {
+                indicator: {
+                    backgroundColor: '#6366f1',
+                    height: 3,
+                    borderRadius: '3px 3px 0 0',
                 },
             },
         },
         MuiPaper: {
             styleOverrides: {
                 root: {
-                    borderRadius: 20,
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(16px)',
+                    borderRadius: 16,
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                    border: '1px solid #f3f4f6',
+                },
+                elevation1: {
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                 },
             },
         },
         MuiChip: {
             styleOverrides: {
                 root: {
-                    fontWeight: 600,
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                    fontWeight: 500,
+                    fontSize: '0.75rem',
+                    borderRadius: 8,
+                },
+                colorPrimary: {
+                    backgroundColor: '#ede9fe',
+                    color: '#6366f1',
+                },
+            },
+        },
+        MuiCheckbox: {
+            styleOverrides: {
+                root: {
+                    color: '#d1d5db',
+                    '&.Mui-checked': {
+                        color: '#6366f1',
+                    },
+                },
+            },
+        },
+        MuiRadio: {
+            styleOverrides: {
+                root: {
+                    color: '#d1d5db',
+                    '&.Mui-checked': {
+                        color: '#6366f1',
+                    },
                 },
             },
         },
@@ -150,8 +216,8 @@ export default function App() {
             // Optionally validate parsed shape here
             setJob(parsed as JobConfig);
             setYamlError(null);
-        } catch (err: any) {
-            setYamlError(err.message || "YAML parse error");
+        } catch (err: unknown) {
+            setYamlError(err instanceof Error ? err.message : "YAML parse error");
         }
     }
 
@@ -172,38 +238,21 @@ export default function App() {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box sx={{ 
-                background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)', 
+                background: 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)', 
                 minHeight: '100vh', 
-                py: 4, 
+                py: 6, 
                 px: 4,
-                position: 'relative',
-                '&::before': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%)',
-                    pointerEvents: 'none',
-                }
             }}>
-                    <Paper elevation={0} sx={{ 
-                        mb: 4, 
-                        borderRadius: 3, 
-                        overflow: 'hidden',
-                        background: 'rgba(255, 255, 255, 0.1)',
-                        backdropFilter: 'blur(20px)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                    }}>
+                <Box sx={{ maxWidth: 1400, mx: 'auto' }}>
+                    <Paper elevation={1} sx={{ mb: 4, backgroundColor: '#ffffff' }}>
                         <Tabs 
                             value={tab} 
                             onChange={(_, val) => setTab(val)}
                             sx={{ 
                                 '& .MuiTab-root': { 
                                     minHeight: 60,
-                                    fontSize: '1.1rem'
+                                    fontSize: '1rem',
+                                    fontWeight: 600,
                                 }
                             }}
                         >
@@ -223,68 +272,108 @@ export default function App() {
                                 onUpdate={updateValidation}
                                 onRemove={removeValidation}
                             />
-                            <Box display="flex" gap={2} justifyContent="center" mt={4}>
-                                <Button 
-                                    variant="contained" 
-                                    size="large"
-                                    onClick={() => {
-                                        const blob = new Blob([toYaml(job)], { type: "text/yaml" });
-                                        const url = URL.createObjectURL(blob);
-                                        const a = document.createElement("a");
-                                        a.href = url; a.download = `${job.job_name || "job"}.yml`; a.click();
-                                        URL.revokeObjectURL(url);
-                                    }}
-                                    sx={{ 
-                                        background: 'linear-gradient(135deg, #06d6a0 0%, #059669 100%)',
+
+                            {/* Enhanced Action Buttons */}
+                            <Paper
+                                elevation={0}
+                                sx={{
+                                    mt: 4,
+                                    p: 4,
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                    borderRadius: 3,
+                                    boxShadow: '0 10px 30px rgba(102, 126, 234, 0.3)',
+                                }}
+                            >
+                                <Typography
+                                    variant="h6"
+                                    sx={{
                                         color: 'white',
-                                        boxShadow: '0 8px 32px rgba(6, 214, 160, 0.4), 0 0 20px rgba(6, 214, 160, 0.2)',
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                        '&:hover': { 
-                                            background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
-                                            boxShadow: '0 12px 40px rgba(6, 214, 160, 0.5), 0 0 30px rgba(6, 214, 160, 0.3)',
-                                            transform: 'translateY(-3px)',
-                                        }
+                                        mb: 3,
+                                        fontWeight: 700,
+                                        textAlign: 'center',
+                                        textShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                     }}
                                 >
-                                    💾 Download YAML
-                                </Button>
-                                <Button 
-                                    variant="contained" 
-                                    size="large"
-                                    onClick={() => setTab(1)}
-                                    sx={{ 
-                                        background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-                                        color: 'white',
-                                        boxShadow: '0 8px 32px rgba(30, 41, 59, 0.4), 0 0 20px rgba(30, 41, 59, 0.2)',
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                        '&:hover': { 
-                                            background: 'linear-gradient(135deg, #334155 0%, #475569 100%)',
-                                            boxShadow: '0 12px 40px rgba(30, 41, 59, 0.5), 0 0 30px rgba(30, 41, 59, 0.3)',
-                                            transform: 'translateY(-3px)',
-                                        }
-                                    }}
+                                    🚀 Ready to Export?
+                                </Typography>
+                                <Box
+                                    display="flex"
+                                    gap={2}
+                                    justifyContent="center"
+                                    flexWrap="wrap"
                                 >
-                                    📄 Preview YAML
-                                </Button>
-                                <Button 
-                                    variant="contained" 
-                                    size="large"
-                                    onClick={() => setTab(2)}
-                                    sx={{ 
-                                        background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
-                                        color: 'white',
-                                        boxShadow: '0 8px 32px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.2)',
-                                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                                        '&:hover': { 
-                                            background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                                            boxShadow: '0 12px 40px rgba(59, 130, 246, 0.5), 0 0 30px rgba(59, 130, 246, 0.3)',
-                                            transform: 'translateY(-3px)',
-                                        }
-                                    }}
-                                >
-                                    ✏️ Edit YAML
-                                </Button>
-                            </Box>
+                                    <Button
+                                        variant="contained"
+                                        size="large"
+                                        sx={{
+                                            backgroundColor: 'white',
+                                            color: '#667eea',
+                                            fontWeight: 700,
+                                            px: 4,
+                                            py: 1.5,
+                                            fontSize: '1rem',
+                                            '&:hover': {
+                                                backgroundColor: '#f3f4f6',
+                                                transform: 'translateY(-2px)',
+                                                boxShadow: '0 12px 30px rgba(0, 0, 0, 0.2)',
+                                            }
+                                        }}
+                                        onClick={() => {
+                                            const blob = new Blob([toYaml(job)], { type: "text/yaml" });
+                                            const url = URL.createObjectURL(blob);
+                                            const a = document.createElement("a");
+                                            a.href = url; a.download = `${job.job_name || "job"}.yml`; a.click();
+                                            URL.revokeObjectURL(url);
+                                        }}
+                                    >
+                                        💾 Download YAML
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        size="large"
+                                        sx={{
+                                            borderColor: 'white',
+                                            color: 'white',
+                                            fontWeight: 700,
+                                            px: 4,
+                                            py: 1.5,
+                                            fontSize: '1rem',
+                                            borderWidth: 2,
+                                            '&:hover': {
+                                                borderColor: 'white',
+                                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                borderWidth: 2,
+                                                transform: 'translateY(-2px)',
+                                            }
+                                        }}
+                                        onClick={() => setTab(1)}
+                                    >
+                                        📄 Preview YAML
+                                    </Button>
+                                    <Button
+                                        variant="outlined"
+                                        size="large"
+                                        sx={{
+                                            borderColor: 'white',
+                                            color: 'white',
+                                            fontWeight: 700,
+                                            px: 4,
+                                            py: 1.5,
+                                            fontSize: '1rem',
+                                            borderWidth: 2,
+                                            '&:hover': {
+                                                borderColor: 'white',
+                                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                borderWidth: 2,
+                                                transform: 'translateY(-2px)',
+                                            }
+                                        }}
+                                        onClick={() => setTab(2)}
+                                    >
+                                        ✏️ Edit YAML
+                                    </Button>
+                                </Box>
+                            </Paper>
                         </Box>
                     )}
 
@@ -336,6 +425,7 @@ export default function App() {
                             </Box>
                         </Paper>
                     )}
+                </Box>
             </Box>
         </ThemeProvider>
     );

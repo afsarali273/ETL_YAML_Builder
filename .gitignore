@@ -23,8 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-# Electron
-release/
-*.exe
-*.dmg
-*.AppImage
+# Portable distribution
+dist-app/

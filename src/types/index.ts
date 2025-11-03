@@ -72,13 +72,44 @@ export interface DuplicateCheckValidation {
     trim_whitespace?: boolean;
 }
 
+export interface SchemaCompareValidation {
+    type: "schema_compare";
+    name: string;
+    enabled: boolean;
+    check: {
+        datatype?: boolean;
+        length?: boolean;
+        nullable?: boolean;
+        default?: boolean;
+        primary_key?: boolean;
+        column_order?: boolean;
+        extra_columns?: boolean;
+        missing_columns?: boolean;
+        ignore_case?: boolean;
+        strict_mode?: boolean;
+    };
+    json_schema_path?: string;
+}
+
+export interface InsertExistingDataValidation {
+    type: "insert_existing_data";
+    name: string;
+    enabled: boolean;
+    scope?: "source" | "target";
+    row_count?: number;
+    exclude_columns?: string[];
+    columns_to_auto_populate_data?: string[];
+}
+
 export type Validation =
     | RowCountValidation
     | RowCompareValidation
     | ColumnCountValidation
     | NullCheckValidation
     | ColValueCheckValidation
-    | DuplicateCheckValidation;
+    | DuplicateCheckValidation
+    | SchemaCompareValidation
+    | InsertExistingDataValidation;
 
 export interface JobConfig {
     job_name: string;
