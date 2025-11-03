@@ -1,5 +1,5 @@
 import type { JobConfig } from "../types";
-import { TextField, Box, Paper, Typography, Divider, InputAdornment } from "@mui/material";
+import { TextField, Box, Paper, Typography, InputAdornment } from "@mui/material";
 import WorkIcon from '@mui/icons-material/Work';
 import PersonIcon from '@mui/icons-material/Person';
 import DescriptionIcon from '@mui/icons-material/Description';

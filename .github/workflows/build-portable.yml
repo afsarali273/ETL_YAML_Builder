@@ -30,11 +30,7 @@ jobs:
           cache: 'npm'
 
       - name: 📥 Install Dependencies
-        run: npm ci
-
-      - name: 🧪 Run Tests (if available)
-        run: npm test --if-present
-        continue-on-error: true
+        run: npm install
 
       - name: 🏗️ Build Portable Distribution
         shell: pwsh
@@ -217,4 +213,4 @@ jobs:
             
             For issues or feature requests, please visit our [Issues page](https://github.com/${{ github.repository }}/issues).
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

@@ -1,5 +1,5 @@
 import type { Validation } from "../types";
-import { Box, TextField, Select, MenuItem, IconButton, Paper, Typography, Chip, FormControlLabel, Checkbox, Radio, RadioGroup, FormControl, FormLabel, Button, Collapse, Grid } from "@mui/material";
+import { Box, TextField, Select, MenuItem, IconButton, Paper, Typography, Chip, FormControlLabel, Checkbox, Radio, RadioGroup, FormControl, FormLabel, Collapse } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -300,20 +300,20 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                             {/* Collapsible Content */}
                             <Collapse in={isExpanded} timeout="auto">
                                 <Box sx={{ p: 3, backgroundColor: '#ffffff' }}>
-                                    <Grid container spacing={2.5}>
+                                    <Box display="grid" gap={2.5}>
                                         {/* Common fields */}
-                                        <Grid item xs={12} md={8}>
-                                            <TextField 
+                                        <Box gridColumn="span 8">
+                                            <TextField
                                                 fullWidth 
                                                 label="Validation Name" 
                                                 value={(v as any).name || ""} 
                                                 onChange={(e)=> onUpdate(idx, {...v, name: e.target.value} as Validation)} 
                                                 size="small"
                                             />
-                                        </Grid>
-                                        
-                                        <Grid item xs={12} md={4}>
-                                            <FormControlLabel 
+                                        </Box>
+
+                                        <Box gridColumn="span 4">
+                                            <FormControlLabel
                                                 control={
                                                     <Checkbox 
                                                         checked={(v as any).enabled ?? true} 
@@ -322,12 +322,12 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                 }
                                                 label="Enabled"
                                             />
-                                        </Grid>
+                                        </Box>
 
                                         {/* Row Count Validation */}
                                         {v.type === "row_count" && (
-                                            <Grid item xs={12} md={6}>
-                                                <TextField 
+                                            <Box gridColumn="span 6">
+                                                <TextField
                                                     fullWidth
                                                     label="Tolerance (0-1)" 
                                                     type="number" 
@@ -336,50 +336,50 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                     onChange={(e)=> onUpdate(idx, {...v, tolerance: parseFloat(e.target.value)} as Validation)} 
                                                     size="small"
                                                 />
-                                            </Grid>
+                                            </Box>
                                         )}
 
                                         {/* Row Compare Validation */}
                                         {v.type === "row_compare" && (
                                             <>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Key columns (comma separated)" 
                                                         value={(v as any).key_columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, key_columns: e.target.value.split(",").map(s=>s.trim())} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Compare columns (comma separated, empty=all)" 
                                                         value={(v as any).compare_columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, compare_columns: e.target.value ? e.target.value.split(",").map(s=>s.trim()) : []} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Exclude columns (comma separated)" 
                                                         value={(v as any).exclude_columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, exclude_columns: e.target.value ? e.target.value.split(",").map(s=>s.trim()) : []} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Include only columns (comma separated)" 
                                                         value={(v as any).include_only_columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, include_only_columns: e.target.value ? e.target.value.split(",").map(s=>s.trim()) : []} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Max mismatches" 
                                                         type="number" 
@@ -387,59 +387,47 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         onChange={(e)=> onUpdate(idx, {...v, max_mismatches: parseInt(e.target.value)} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Box>
+                                                <Box gridColumn="span 12">
                                                     <Paper sx={{ p: 2, backgroundColor: '#f9fafb' }}>
                                                         <Typography variant="subtitle2" sx={{ mb: 1.5, fontWeight: 600, color: '#374151' }}>
                                                             Comparison Options
                                                         </Typography>
-                                                        <Grid container spacing={1}>
-                                                            <Grid item xs={6} sm={4} md={3}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).ignore_case ?? true} onChange={(e)=> onUpdate(idx, {...v, ignore_case: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Ignore case</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4} md={3}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).trim_whitespace ?? true} onChange={(e)=> onUpdate(idx, {...v, trim_whitespace: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Trim whitespace</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4} md={3}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).null_equals_blank ?? false} onChange={(e)=> onUpdate(idx, {...v, null_equals_blank: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Null equals blank</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4} md={3}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).allow_duplicate_keys ?? false} onChange={(e)=> onUpdate(idx, {...v, allow_duplicate_keys: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Allow duplicate keys</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4} md={3}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).log_duplicates ?? true} onChange={(e)=> onUpdate(idx, {...v, log_duplicates: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Log duplicates</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4} md={3}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).stop_on_first_mismatch ?? false} onChange={(e)=> onUpdate(idx, {...v, stop_on_first_mismatch: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Stop on first mismatch</Typography>}
-                                                                />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <Box display="grid" gap={1}>
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).ignore_case ?? true} onChange={(e)=> onUpdate(idx, {...v, ignore_case: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Ignore case</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).trim_whitespace ?? true} onChange={(e)=> onUpdate(idx, {...v, trim_whitespace: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Trim whitespace</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).null_equals_blank ?? false} onChange={(e)=> onUpdate(idx, {...v, null_equals_blank: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Null equals blank</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).allow_duplicate_keys ?? false} onChange={(e)=> onUpdate(idx, {...v, allow_duplicate_keys: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Allow duplicate keys</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).log_duplicates ?? true} onChange={(e)=> onUpdate(idx, {...v, log_duplicates: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Log duplicates</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).stop_on_first_mismatch ?? false} onChange={(e)=> onUpdate(idx, {...v, stop_on_first_mismatch: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Stop on first mismatch</Typography>}
+                                                            />
+                                                        </Box>
                                                     </Paper>
-                                                </Grid>
+                                                </Box>
                                             </>
                                         )}
 
                                         {/* Column Count Validation */}
                                         {v.type === "column_count" && (
-                                            <Grid item xs={12} md={6}>
-                                                <TextField 
+                                            <Box gridColumn="span 6">
+                                                <TextField
                                                     fullWidth
                                                     label="Target Count" 
                                                     type="number" 
@@ -447,23 +435,23 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                     onChange={(e)=> onUpdate(idx, {...v, targetCount: parseInt(e.target.value)} as Validation)} 
                                                     size="small"
                                                 />
-                                            </Grid>
+                                            </Box>
                                         )}
 
                                         {/* Null Check Validation */}
                                         {v.type === "null_check" && (
                                             <>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Columns (comma separated)" 
                                                         value={(v as any).columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, columns: e.target.value.split(",").map(s=>s.trim())} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 3">
+                                                    <TextField
                                                         fullWidth
                                                         label="Threshold" 
                                                         type="number" 
@@ -471,14 +459,14 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         onChange={(e)=> onUpdate(idx, {...v, threshold: parseInt(e.target.value)} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={3}>
-                                                    <FormControlLabel 
+                                                </Box>
+                                                <Box gridColumn="span 3">
+                                                    <FormControlLabel
                                                         control={<Checkbox checked={(v as any).fail_on_any ?? false} onChange={(e)=> onUpdate(idx, {...v, fail_on_any: e.target.checked} as Validation)} />}
                                                         label="Fail on any"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Box>
+                                                <Box gridColumn="span 12">
                                                     <FormControl>
                                                         <FormLabel sx={{ fontSize: '0.875rem' }}>Scope</FormLabel>
                                                         <RadioGroup 
@@ -490,57 +478,57 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                             <FormControlLabel value="target" control={<Radio />} label="Target" />
                                                         </RadioGroup>
                                                     </FormControl>
-                                                </Grid>
+                                                </Box>
                                             </>
                                         )}
 
                                         {/* Column Value Check Validation */}
                                         {v.type === "col_value_check" && (
                                             <>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Columns (comma separated)" 
                                                         value={(v as any).columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, columns: e.target.value.split(",").map(s=>s.trim())} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Expected column value" 
                                                         value={(v as any).expected_col_value || ""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, expected_col_value: e.target.value} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
+                                                </Box>
                                             </>
                                         )}
 
                                         {/* Duplicate Check Validation */}
                                         {v.type === "duplicate_check" && (
                                             <>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Columns (comma separated)" 
                                                         value={(v as any).columns?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, columns: e.target.value.split(",").map(s=>s.trim())} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 6">
+                                                    <TextField
                                                         fullWidth
                                                         label="Group by (comma separated)" 
                                                         value={(v as any).group_by?.join(",")||""} 
                                                         onChange={(e)=> onUpdate(idx, {...v, group_by: e.target.value ? e.target.value.split(",").map(s=>s.trim()) : []} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={4}>
-                                                    <TextField 
+                                                </Box>
+                                                <Box gridColumn="span 4">
+                                                    <TextField
                                                         fullWidth
                                                         label="Threshold" 
                                                         type="number" 
@@ -548,32 +536,26 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         onChange={(e)=> onUpdate(idx, {...v, threshold: parseInt(e.target.value)} as Validation)} 
                                                         size="small"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={8}>
+                                                </Box>
+                                                <Box gridColumn="span 8">
                                                     <Paper sx={{ p: 2, backgroundColor: '#f9fafb' }}>
-                                                        <Grid container spacing={1}>
-                                                            <Grid item xs={6} sm={4}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).fail_on_any ?? true} onChange={(e)=> onUpdate(idx, {...v, fail_on_any: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Fail on any</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).ignore_case ?? true} onChange={(e)=> onUpdate(idx, {...v, ignore_case: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Ignore case</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={6} sm={4}>
-                                                                <FormControlLabel 
-                                                                    control={<Checkbox checked={(v as any).trim_whitespace ?? true} onChange={(e)=> onUpdate(idx, {...v, trim_whitespace: e.target.checked} as Validation)} />}
-                                                                    label={<Typography variant="body2">Trim whitespace</Typography>}
-                                                                />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <Box display="grid" gap={1}>
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).fail_on_any ?? true} onChange={(e)=> onUpdate(idx, {...v, fail_on_any: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Fail on any</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).ignore_case ?? true} onChange={(e)=> onUpdate(idx, {...v, ignore_case: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Ignore case</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={<Checkbox checked={(v as any).trim_whitespace ?? true} onChange={(e)=> onUpdate(idx, {...v, trim_whitespace: e.target.checked} as Validation)} />}
+                                                                label={<Typography variant="body2">Trim whitespace</Typography>}
+                                                            />
+                                                        </Box>
                                                     </Paper>
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Box>
+                                                <Box gridColumn="span 12">
                                                     <FormControl>
                                                         <FormLabel sx={{ fontSize: '0.875rem' }}>Scope</FormLabel>
                                                         <RadioGroup 
@@ -585,14 +567,14 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                             <FormControlLabel value="target" control={<Radio />} label="Target" />
                                                         </RadioGroup>
                                                     </FormControl>
-                                                </Grid>
+                                                </Box>
                                             </>
                                         )}
 
                                         {/* Schema Compare Validation */}
                                         {v.type === "schema_compare" && (
                                             <>
-                                                <Grid item xs={12}>
+                                                <Box gridColumn="span 12">
                                                     <TextField
                                                         fullWidth
                                                         label="JSON Schema Path (optional)"
@@ -602,133 +584,113 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         placeholder="C:\Users\qa_automation\IdeaProjects\MySchema\customer_table.json"
                                                         helperText="Optional path to external schema file for validation"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Box>
+                                                <Box gridColumn="span 12">
                                                     <Paper sx={{ p: 2.5, backgroundColor: '#f9fafb', border: '2px solid #e5e7eb' }}>
                                                         <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 600, color: '#374151', display: 'flex', alignItems: 'center', gap: 1 }}>
                                                             🔍 Schema Comparison Options
                                                         </Typography>
-                                                        <Grid container spacing={2}>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.datatype ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, datatype: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Data Type</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.length ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, length: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Length</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.nullable ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, nullable: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Nullable</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.default ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, default: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Default Value</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.primary_key ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, primary_key: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Primary Key</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.column_order ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, column_order: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Column Order</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.extra_columns ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, extra_columns: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Extra Columns</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.missing_columns ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, missing_columns: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Missing Columns</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.ignore_case ?? true}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, ignore_case: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Ignore Case</Typography>}
-                                                                />
-                                                            </Grid>
-                                                            <Grid item xs={12} sm={6} md={4}>
-                                                                <FormControlLabel
-                                                                    control={
-                                                                        <Checkbox
-                                                                            checked={(v as any).check?.strict_mode ?? false}
-                                                                            onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, strict_mode: e.target.checked}} as Validation)}
-                                                                        />
-                                                                    }
-                                                                    label={<Typography variant="body2">Strict Mode</Typography>}
-                                                                />
-                                                            </Grid>
-                                                        </Grid>
+                                                        <Box display="grid" gap={2}>
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.datatype ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, datatype: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Data Type</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.length ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, length: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Length</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.nullable ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, nullable: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Nullable</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.default ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, default: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Default Value</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.primary_key ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, primary_key: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Primary Key</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.column_order ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, column_order: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Column Order</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.extra_columns ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, extra_columns: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Extra Columns</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.missing_columns ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, missing_columns: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Missing Columns</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.ignore_case ?? true}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, ignore_case: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Ignore Case</Typography>}
+                                                            />
+                                                            <FormControlLabel
+                                                                control={
+                                                                    <Checkbox
+                                                                        checked={(v as any).check?.strict_mode ?? false}
+                                                                        onChange={(e)=> onUpdate(idx, {...v, check: {...(v as any).check, strict_mode: e.target.checked}} as Validation)}
+                                                                    />
+                                                                }
+                                                                label={<Typography variant="body2">Strict Mode</Typography>}
+                                                            />
+                                                        </Box>
                                                     </Paper>
-                                                </Grid>
+                                                </Box>
                                             </>
                                         )}
 
                                         {/* Insert Existing Data Validation */}
                                         {v.type === "insert_existing_data" && (
                                             <>
-                                                <Grid item xs={12} md={6}>
+                                                <Box gridColumn="span 6">
                                                     <TextField
                                                         fullWidth
                                                         label="Row Count"
@@ -738,8 +700,8 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         size="small"
                                                         helperText="Number of rows to copy"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12} md={6}>
+                                                </Box>
+                                                <Box gridColumn="span 6">
                                                     <FormControl fullWidth size="small">
                                                         <FormLabel sx={{ fontSize: '0.875rem', mb: 1 }}>Scope</FormLabel>
                                                         <RadioGroup
@@ -751,8 +713,8 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                             <FormControlLabel value="target" control={<Radio />} label="Target" />
                                                         </RadioGroup>
                                                     </FormControl>
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Box>
+                                                <Box gridColumn="span 12">
                                                     <TextField
                                                         fullWidth
                                                         label="Exclude Columns (comma separated)"
@@ -762,8 +724,8 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         helperText="Columns to skip (e.g., auto-increment fields)"
                                                         placeholder="id, created_at, updated_at"
                                                     />
-                                                </Grid>
-                                                <Grid item xs={12}>
+                                                </Box>
+                                                <Box gridColumn="span 12">
                                                     <TextField
                                                         fullWidth
                                                         label="Columns to Auto-Populate Data (comma separated)"
@@ -773,10 +735,10 @@ export default function ValidationBuilder({ validations, onAdd, onUpdate, onRemo
                                                         helperText="Columns where values should be auto-generated"
                                                         placeholder="uuid, timestamp, random_value"
                                                     />
-                                                </Grid>
+                                                </Box>
                                             </>
                                         )}
-                                    </Grid>
+                                    </Box>
                                 </Box>
                             </Collapse>
                         </Paper>
