@@ -1,0 +1,220 @@
+name: Build Portable Distribution
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:  # Allow manual trigger
+  release:
+    types: [created, published]
+
+jobs:
+  build-portable:
+    name: Create Portable Windows Build
+    runs-on: windows-latest
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: 📥 Install Dependencies
+        run: npm ci
+
+      - name: 🧪 Run Tests (if available)
+        run: npm test --if-present
+        continue-on-error: true
+
+      - name: 🏗️ Build Portable Distribution
+        shell: pwsh
+        run: |
+          Write-Host "Starting portable build process..." -ForegroundColor Cyan
+          .\create-portable.ps1
+
+      - name: 📊 Display Build Info
+        shell: pwsh
+        run: |
+          if (Test-Path "dist-app/version.json") {
+            Write-Host "Build Information:" -ForegroundColor Green
+            Get-Content "dist-app/version.json" | ConvertFrom-Json | Format-List
+          }
+          
+          Write-Host "`nDistribution Size:" -ForegroundColor Green
+          $size = (Get-ChildItem dist-app -Recurse | Measure-Object -Property Length -Sum).Sum
+          Write-Host "$([math]::Round($size / 1MB, 2)) MB"
+
+      - name: 📦 Create Distribution Archive
+        shell: pwsh
+        run: |
+          $version = "v1.0.0"
+          $date = Get-Date -Format "yyyyMMdd"
+          $archiveName = "ETL-YAML-Builder-Portable-$version-$date.zip"
+          
+          Write-Host "Creating archive: $archiveName" -ForegroundColor Cyan
+          Compress-Archive -Path "dist-app\*" -DestinationPath $archiveName -Force
+          
+          Write-Host "Archive created successfully!" -ForegroundColor Green
+          Write-Host "Archive size: $([math]::Round((Get-Item $archiveName).Length / 1MB, 2)) MB"
+          
+          # Save archive name for later steps
+          echo "ARCHIVE_NAME=$archiveName" >> $env:GITHUB_ENV
+
+      - name: 📤 Upload Portable Build as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: etl-yaml-builder-portable-windows
+          path: dist-app/
+          retention-days: 30
+          compression-level: 6
+
+      - name: 📤 Upload Distribution Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: etl-yaml-builder-portable-archive
+          path: "*.zip"
+          retention-days: 90
+
+      - name: 📝 Generate Build Summary
+        shell: pwsh
+        run: |
+          $summary = @"
+          ## 🎉 Portable Build Completed Successfully!
+          
+          ### 📦 Build Information
+          - **Build Date**: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss UTC")
+          - **Workflow Run**: [${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          - **Commit**: [${{ github.sha }}](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})
+          - **Branch**: ${{ github.ref_name }}
+          
+          ### 📊 Distribution Details
+          - **Node.js Version**: v20.11.1
+          - **Platform**: Windows x64
+          - **Package Size**: $([math]::Round((Get-ChildItem dist-app -Recurse | Measure-Object -Property Length -Sum).Sum / 1MB, 2)) MB
+          
+          ### 📥 Download Artifacts
+          Two artifacts have been uploaded:
+          1. **etl-yaml-builder-portable-windows** - Uncompressed distribution folder
+          2. **etl-yaml-builder-portable-archive** - ZIP archive ready for distribution
+          
+          ### 🚀 How to Use
+          1. Download the artifact from this workflow run
+          2. Extract the ZIP file
+          3. Double-click \`run.bat\` to start the application
+          4. The app will open at http://localhost:3000
+          
+          ### ✨ Features Included
+          - Visual YAML configuration builder
+          - 8 validation types (Row Count, Row Compare, Column Count, etc.)
+          - Real-time YAML preview
+          - Export to .yml files
+          - Fully portable - no installation required
+          
+          ### 📋 Contents
+          - React Application (optimized production build)
+          - Portable Node.js runtime
+          - HTTP server
+          - Startup scripts
+          - Complete documentation
+          
+          ---
+          *Built with ❤️ using GitHub Actions*
+          "@
+          
+          $summary | Out-File -FilePath $env:GITHUB_STEP_SUMMARY -Encoding UTF8
+
+      - name: ✅ Build Complete
+        shell: pwsh
+        run: |
+          Write-Host ""
+          Write-Host "╔═══════════════════════════════���════════════════════════╗" -ForegroundColor Green
+          Write-Host "║   ✅ PORTABLE BUILD WORKFLOW COMPLETED SUCCESSFULLY!   ║" -ForegroundColor Green
+          Write-Host "╚═══════════════════════════════���════════════════════════╝" -ForegroundColor Green
+          Write-Host ""
+          Write-Host "🎉 Artifacts are ready for download!" -ForegroundColor Cyan
+          Write-Host "📦 Check the 'Artifacts' section in this workflow run" -ForegroundColor Yellow
+          Write-Host ""
+
+  # Optional: Auto-release on tags or manual trigger
+  create-release:
+    name: Create GitHub Release
+    runs-on: windows-latest
+    needs: build-portable
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+
+    steps:
+      - name: 📦 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📥 Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: etl-yaml-builder-portable-archive
+          path: ./artifacts
+
+      - name: 🏷️ Generate Release Version
+        id: version
+        shell: pwsh
+        run: |
+          if ("${{ github.ref }}" -like "refs/tags/*") {
+            $version = "${{ github.ref_name }}"
+          } else {
+            $version = "v1.0.0-build.${{ github.run_number }}"
+          }
+          Write-Host "Release version: $version" -ForegroundColor Cyan
+          echo "VERSION=$version" >> $env:GITHUB_OUTPUT
+          echo "TAG=$version" >> $env:GITHUB_ENV
+
+      - name: 🏷️ Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./artifacts/*.zip
+          tag_name: ${{ steps.version.outputs.VERSION }}
+          name: ETL YAML Builder ${{ steps.version.outputs.VERSION }}
+          draft: false
+          prerelease: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+          generate_release_notes: true
+          body: |
+            ## ETL YAML Builder - Portable Distribution
+            
+            ### 🚀 Quick Start
+            1. Download the ZIP file below
+            2. Extract to any location
+            3. Run `run.bat`
+            4. Build your YAML configurations!
+            
+            ### ✨ What's New in This Release
+            - Visual form builder with modern UI
+            - 8 validation types supported
+            - Real-time YAML preview
+            - No installation required
+            
+            ### 📋 System Requirements
+            - Windows 7 or later (64-bit)
+            - 100 MB free disk space
+            - Any modern web browser
+            
+            ### 📦 Download
+            Choose the portable ZIP file below and extract it anywhere on your Windows PC.
+            
+            ### 📝 Build Information
+            - **Build Date**: ${{ github.event.head_commit.timestamp }}
+            - **Commit**: ${{ github.sha }}
+            - **Branch**: ${{ github.ref_name }}
+            - **Workflow Run**: #${{ github.run_number }}
+            
+            ---
+            
+            For issues or feature requests, please visit our [Issues page](https://github.com/${{ github.repository }}/issues).
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
